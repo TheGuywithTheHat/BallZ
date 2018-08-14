@@ -8,8 +8,10 @@ class PhysicsObject {
   
   PhysicsObject(PVector position) {
     mass = 1;
-    damping = 1;
+    damping = 0.2;
     this.position = position;
+    velocity = new PVector();
+    forces = new ArrayList();
   }
   
   void commitForces() {
@@ -22,6 +24,7 @@ class PhysicsObject {
     }
     accel.div(mass);
     velocity.add(accel);
+    forces = new ArrayList();
   }
   
   void move() {
