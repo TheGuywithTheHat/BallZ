@@ -8,7 +8,7 @@ class PhysicsObject {
   
   PhysicsObject(PVector position) {
     mass = 1;
-    damping = 0.2;
+    damping = 0.1;
     this.position = position;
     velocity = new PVector();
     forces = new ArrayList();

@@ -1,7 +1,7 @@
 static final int DETAIL = 32; // number of points
 static final float SIZE = 64; // radius
 
-static final float MOVE_ACCEL = 0.5;
+static final float MOVE_ACCEL = 0.7;
 
 class Ball extends PhysicsObject {
   PhysicsObject[] vertices;
@@ -46,11 +46,28 @@ class Ball extends PhysicsObject {
     for(int i = 0; i < vertices.length; i++) {
       PhysicsObject vertex = vertices[i];
       
+      /*
+      PVector target = new PVector(0, -SIZE).rotate(TWO_PI / DETAIL * i).add(position);
+      vertex.forces.add(target.sub(vertex.position).mult(0.1));
+      */
+
       PVector rotTarget = PVector.add(vertices[Math.floorMod(i - 1, vertices.length)].position, vertices[Math.floorMod(i + 1, vertices.length)].position);
-      vertex.forces.add(rotTarget.mult(0.5).sub(vertex.position).mult(1));
+      vertex.forces.add(rotTarget.mult(0.5).sub(vertex.position).mult(0.1));
       
       PVector radialForce = PVector.sub(vertex.position, position).setMag(SIZE - PVector.dist(vertex.position, position));
       vertex.forces.add(radialForce.mult(0.3));
+      
+      for(int j = 0; j < vertices.length; j++) {
+        if(j == i) {
+          continue;
+        }
+        float dist = TWO_PI * SIZE / DETAIL;
+        if(PVector.dist(vertex.position, vertices[j].position) < dist) {
+          PVector correctionForce = PVector.sub(vertex.position, vertices[j].position);
+          correctionForce.setMag(dist - correctionForce.mag());
+          vertex.forces.add(correctionForce.mult(0.3));
+        }
+      }
       
       for(Ball ball : ballz) {
         if(ball == this) {
@@ -68,6 +85,12 @@ class Ball extends PhysicsObject {
     for(PhysicsObject vertex : vertices) {
       vertex.move();
     }
+    
+    PVector middleTarget = new PVector();
+    for(PhysicsObject vertex : vertices) {
+      middleTarget.add(vertex.position);
+    }
+    forces.add(middleTarget.div(DETAIL).sub(position).mult(0.03));
   }
   
   void draw() {
