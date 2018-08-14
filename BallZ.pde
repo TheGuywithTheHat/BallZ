@@ -6,21 +6,26 @@ List<Ball> ballz;
 Random random;
 
 void settings() {
-  fullScreen();
+  size(displayWidth / 2, displayHeight / 2);
 }
 
 void setup() {
   setupGraphics();
   
   
-  ballz = new ArrayList<>(1);
+  ballz = new ArrayList(1);
   random = new Random();
   
   ballz.add(new Ball());
 }
 
 void draw() {
-  surface.setTitle("FPS: " + frameRate);
+  surface.setTitle("FPS: " + round(frameRate));
+  
+  background(0);
+  for(Ball ball : ballz) {
+    ball.draw();
+  }
 }
 
 void setupGraphics() {

@@ -16,6 +16,13 @@ class Ball extends PhysicsObject {
   }
   
   void draw() {
-    
+    stroke(200, 64, 64);
+    strokeWeight(1);
+    fill(255, 192);
+    beginShape();
+    for(PhysicsObject vertex : vertices) {
+      vertex(vertex.position.x, vertex.position.y);
+    }
+    endShape(CLOSE);
   }
 }
