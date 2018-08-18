@@ -1,7 +1,7 @@
 static final int DETAIL = 32; // number of points
 static final float SIZE = 64; // radius
 
-static final float MOVE_ACCEL = 0.7;
+static final float MOVE_ACCEL = 4;
 
 class Ball extends PhysicsObject {
   PhysicsObject[] vertices;
@@ -17,6 +17,8 @@ class Ball extends PhysicsObject {
       vertexOffset.rotate(TWO_PI / DETAIL);
     }
     control = false;
+    mass = 5;
+    damping = 1;
   }
   
   Ball(boolean control) {
@@ -52,10 +54,10 @@ class Ball extends PhysicsObject {
       */
 
       PVector rotTarget = PVector.add(vertices[Math.floorMod(i - 1, vertices.length)].position, vertices[Math.floorMod(i + 1, vertices.length)].position);
-      vertex.forces.add(rotTarget.mult(0.5).sub(vertex.position).mult(0.1));
+      vertex.forces.add(rotTarget.mult(0.5).sub(vertex.position).mult(0.2));
       
       PVector radialForce = PVector.sub(vertex.position, position).setMag(SIZE - PVector.dist(vertex.position, position));
-      vertex.forces.add(radialForce.mult(0.3));
+      vertex.forces.add(radialForce.mult(0.2));
       
       for(int j = 0; j < vertices.length; j++) {
         if(j == i) {
